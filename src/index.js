@@ -1,12 +1,15 @@
 const baseURI = "http://localhost:3000/pups/"
 const dogBar = document.querySelector("#dog-bar")
-let goodDogFilterOn = false
-
 getDogs()
 
 document
   .querySelector("#good-dog-filter")
   .addEventListener("click", toggleGoodDogFilter)
+
+function goodDogFilterOn() {
+  const filterText = document.querySelector("#good-dog-filter").textContent
+  return filterText.split(" ")[3] === "ON"
+}
 
 function getDogs() {
   dogBar.innerHTML = ""
@@ -72,7 +75,7 @@ function toggleDogQuality(e) {
     .then(updated_dog => {
       const button = e.target
       button.textContent = updated_dog.isGoodDog ? "Bad Dog!" : "Good Dog!"
-      goodDogFilterOn && getGoodDogs()
+      goodDogFilterOn() && getGoodDogs()
     })
 }
 
@@ -96,13 +99,11 @@ function patch(id, body) {
 function toggleGoodDogFilter(e) {
   const buttonTextBase = "Filter good dogs: "
 
-  if (goodDogFilterOn) {
+  if (goodDogFilterOn()) {
     getDogs()
     e.target.textContent = buttonTextBase + "OFF"
-    goodDogFilterOn = false
   } else {
     getGoodDogs()
     e.target.textContent = buttonTextBase + "ON"
-    goodDogFilterOn = true
   }
 }
